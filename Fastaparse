@@ -1,0 +1,41 @@
+###  FASTABLAST
+###  Jenna R. Grimshaw
+###  April 17, 2018
+
+from Bio import SeqIO
+import pandas as pd
+
+print("Opening fasta files....")
+FASTA = SeqIO.parse(open("NW-85.Trinity.fasta.transdecoder.pep"), "fasta") 
+#print(next(SeqIO.parse("NW-85.Trinity.fasta.transdecoder.pep", "fasta")))
+
+print("Opening blast files...")
+fields = ["ID", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
+BLAST = pd.read_table("NW-85.fungi.blastp", names = fields)
+#print(BLAST[:5])
+
+# Create array from first column of blast file
+print("Creating array of IDs from Blast file...")
+BLAST_ID = BLAST["ID"].unique()
+#print(type(BLAST_ID))
+
+# Create hit and no hit file
+RESULTS_HIT = open("RESULTS_HIT.fasta", 'w')
+hitcount = 0
+RESULTS_NOHIT = open("RESULTS_NOHIT.fasta", 'w')
+nohitcount = 0
+
+# Parsing for hits
+print("Parsing for hits...")
+for record in SeqIO.parse(open("NW-85.Trinity.fasta.transdecoder.pep"), "fasta"):
+	if record.id in BLAST_ID:
+		hitcount = hitcount + 1
+		SeqIO.write(record, RESULTS_HIT, "fasta")
+	else:
+		nohitcount = nohitcount + 1
+		SeqIO.write(record, RESULTS_NOHIT, "fasta")
+RESULTS_HIT.close()
+RESULTS_NOHIT.close()
+print("Hit count =", hitcount) #1280
+print("No hit count =", nohitcount) #56836
+print("DONE")
