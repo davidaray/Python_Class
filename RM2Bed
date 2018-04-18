@@ -1,0 +1,41 @@
+import os
+
+
+AVAN_OUT = []
+AVAN_FINAL = []
+# 1. Read in the file
+with open('aVan_rm.out') as AVAN_IN: 
+	AVAN_LIST = AVAN_IN.readlines()[3:]
+	print('Remove 1st three lines...')
+	#print(type(AVAN_IN))
+	print(type(AVAN_LIST))
+	#print(AVAN_LIST[0])
+	print("Replacing strings...")
+	for line in AVAN_LIST:
+		AVAN_LIST2 = line.replace("/", "\t").replace("kimura=", "")
+		AVAN_OUT.append(AVAN_LIST2)
+print(AVAN_OUT[0])
+print("AVAN_OUT is a ", type(AVAN_OUT))
+
+print("Saving as temporary file...")
+NEWFILE = open('temp.bed', 'w')
+for LINE in AVAN_OUT: 
+	NEWFILE.write(LINE)
+NEWFILE.close()
+
+print ("Creating a dataframe...")
+fields = ["A", "B", "C", "D", "chrom", "start", "stop", " E", "strand", "name", "class", "family", "F", "G", "H", "I", "Diverge"]
+AVAN_FINAL = pd.read_table('temp.bed', names = fields)
+
+print("Delete the temporary file...")
+os.remove('temp.bed')
+
+print("Rearrange columns...")
+AVAN_FINAL = AVAN_FINAL[["chrom", "start", "stop", "name", "strand", "class", "family", "Diverge"]]
+print(AVAN_FINAL[:5])
+
+print("Replacing C with -...")
+#AVAN_FINAL = AVAN_FINAL.strand.replace ('C', '-')
+AVAN_FINAL['strand'] = AVAN_FINAL['strand'].replace('C', '-')
+print(AVAN_FINAL[:5])
+print("DONE!")
