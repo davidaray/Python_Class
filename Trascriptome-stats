@@ -1,0 +1,54 @@
+####  Title: Transcriptome Statistics
+####  Author: Jenna R. Grimshaw
+####  Date: April 24, 2018
+
+##########
+#  Purpose: To get statistics about a genome assembly using stats from O'Neil and Emrich
+##########
+
+##########
+#  Part 1: Statistics using only the transcriptome itself
+# 1. Total number of base pairs
+# 2. Numbers of transcripts
+# 3. Number of "unigenes"
+# 4. Mean and median transcript length
+# 5. N50 
+##########
+
+
+##########
+# Total number of base pairs
+##########
+# Steps
+# 1. Read in file
+# 2. Parse the file
+# 3. Determine length of each contig
+# 4. Add all lengths together
+##########
+
+print("Importing modules...")
+from Bio import SeqIO
+import pandas as pd
+import statistics as stats
+
+print("Loading fasta file...")
+FASTA = SeqIO.parse(open("NW-45.Trinity.fasta"), "fasta")
+
+print("Calculating statistics...")
+BASEPAIRS = []
+for record in FASTA: 
+	length = len(record.seq)
+	BASEPAIRS.append(length)
+print("Total base pairs =", sum(BASEPAIRS))
+print("Number of transcripts = ", len(BASEPAIRS))
+print("Mean transcript size =", stats.mean(BASEPAIRS))
+print("Median transcript size =", stats.median(BASEPAIRS))
+
+print("Creating dictionary of records...")
+#DICT = SeqIO.to_dict(SeqIO.parse("NW-45.Trinity.fasta", "fasta"))
+
+RECORD = []
+for record in FASTA:
+	ID = record.id
+	RECORD.append(ID)
+print(len(RECORD))
