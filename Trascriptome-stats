@@ -44,11 +44,9 @@ print("Number of transcripts = ", len(BASEPAIRS)). # 108064
 print("Mean transcript size =", stats.mean(BASEPAIRS)) #. 809.0962947882737
 print("Median transcript size =", stats.median(BASEPAIRS))  # 380.0
 
-print("Creating dictionary of records...")
-#DICT = SeqIO.to_dict(SeqIO.parse("NW-45.Trinity.fasta", "fasta"))
+print("Creating list of IDs...")
 
 RECORD = []
-for record in FASTA:
-	ID = record.id
-	RECORD.append(ID)
+for seq in SeqIO.parse(open("NW-45.Trinity.fasta"), "fasta"):
+	RECORD.append(seq.id)
 print(len(RECORD))
