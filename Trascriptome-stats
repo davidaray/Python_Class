@@ -39,10 +39,10 @@ BASEPAIRS = []
 for record in FASTA: 
 	length = len(record.seq)
 	BASEPAIRS.append(length)
-print("Total base pairs =", sum(BASEPAIRS))
-print("Number of transcripts = ", len(BASEPAIRS))
-print("Mean transcript size =", stats.mean(BASEPAIRS))
-print("Median transcript size =", stats.median(BASEPAIRS))
+print("Total base pairs =", sum(BASEPAIRS)) # 87434182
+print("Number of transcripts = ", len(BASEPAIRS)). # 108064
+print("Mean transcript size =", stats.mean(BASEPAIRS)) #. 809.0962947882737
+print("Median transcript size =", stats.median(BASEPAIRS))  # 380.0
 
 print("Creating dictionary of records...")
 #DICT = SeqIO.to_dict(SeqIO.parse("NW-45.Trinity.fasta", "fasta"))
