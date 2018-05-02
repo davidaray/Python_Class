@@ -1,0 +1,33 @@
+###  Blasting For Hitcount
+###  Jenna R. Grimshaw
+###  May 1, 2018
+
+from Bio import SeqIO
+import pandas as pd
+
+print("Opening fasta files....")
+FASTA = SeqIO.parse(open("NW-45.Trinity.fasta"), "fasta") 
+print(next(SeqIO.parse("NW-45.Trinity.fasta", "fasta")))
+
+print("Opening blast files...")
+fields = ["ID", "Protein", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
+BLAST = pd.read_table("NW-45.physco.blastx", names = fields)
+#print(BLAST[:5])
+
+# Create array from first column of blast file
+print("Creating array of IDs from Blast file...")
+BLAST_ID = BLAST["ID"].unique()
+BLAST_Protein = BLAST["Protein"].unique()
+#print(type(BLAST_ID))
+#print(type(BLAST_Protein))
+# Create hit counts
+hitcount = 0
+
+# Parsing for hits
+print("Parsing for hits...")
+for record in SeqIO.parse(open("NW-45.Trinity.fasta"), "fasta"):
+	if record.id in BLAST_ID:
+		hitcount = hitcount + 1
+print("Hit count =", hitcount) # 40474 for NW-45
+print("Unique proteins =", len(BLAST_Protein)) #12710 for NW-45
+print("DONE")
