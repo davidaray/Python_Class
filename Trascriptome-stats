@@ -49,4 +49,22 @@ print("Creating list of IDs...")
 RECORD = []
 for seq in SeqIO.parse(open("NW-45.Trinity.fasta"), "fasta"):
 	RECORD.append(seq.id)
-print(len(RECORD))
+
+print("Converting to Dataframe...")
+RECORD_UNI = pd.DataFrame(RECORD, columns = ["Unigene"]) # Convert to dataframe
+RECORD_UNI["Unigene"] = RECORD_UNI["Unigene"].str.replace("_i"," i") # Replace _i with i
+RECORD_UNI[["Unigene", "Isoform"]] = RECORD_UNI["Unigene"].str.split(" ", expand = True) # Split Columns
+print(RECORD_UNI[:3])
+
+print("Finding unique Unigenes...")
+RECORD_UNIQUE = RECORD_UNI["Unigene"].unique()
+print("There are ", len(RECORD_UNIQUE), "unique genes in this file")
+
+print("Finding N50...")
+BASEPAIR_sort = sorted(BASEPAIRS, reverse = True)
+HALF = sum(BASEPAIR_sort)/2
+for counter in range (1, num_contig +1):
+	if sum(BASEPAIR_sort[0:counter]) > HALF:
+		print("N50 is:  %d, with counter: %d, and contig length: %d" % (sum(BASEPAIR_sort[0:counter]), counter, BASEPAIR_sort[counter-1]))
+		break
+
